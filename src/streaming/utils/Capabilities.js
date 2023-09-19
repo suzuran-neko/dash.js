@@ -46,8 +46,9 @@ const codecCompatibilityTable = [
 export function supportsMediaSource() {
     let hasWebKit = ('WebKitMediaSource' in window);
     let hasMediaSource = ('MediaSource' in window);
+    let hasManagedMediaSource = ('ManagedMediaSource' in window);
 
-    return (hasWebKit || hasMediaSource);
+    return (hasWebKit || hasMediaSource || hasManagedMediaSource);
 }
 
 function Capabilities() {
@@ -138,6 +139,9 @@ function Capabilities() {
             }
 
             if ('MediaSource' in window && MediaSource.isTypeSupported(codec)) {
+                resolve(true);
+                return;
+            } else if ('ManagedMediaSource' in window) {
                 resolve(true);
                 return;
             } else if ('WebKitMediaSource' in window && WebKitMediaSource.isTypeSupported(codec)) {
